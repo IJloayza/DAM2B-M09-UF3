@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -27,14 +28,14 @@ public class Client {
         String nomFitxerRebut = (String) in.readObject();
         System.out.println("Nom del fitxer a guardar: " + nomFitxerRebut);    
         System.out.println("Rebent fitxer: " + nomFitxerRebut);
-        
-        Fitxer fitxer = new Fitxer(nomFitxerRebut);
-        byte[] fitxerBytes = fitxer.getContingut();
 
-        try (FileOutputStream fileOutputStream = new FileOutputStream(DIR_ARRIBADA)) {
-            fileOutputStream.write(fitxerBytes);
-            System.out.println("Fitxer rebut guardat com: " + DIR_ARRIBADA);
+        byte[] contingut = (byte[]) in.readObject();
+
+        String rutaDesti = DIR_ARRIBADA + File.separator + new File(nomFitxer).getName();
+        try (FileOutputStream dirRebut = new FileOutputStream(rutaDesti)) {
+            dirRebut.write(contingut);
         }
+        System.out.println("Fitxer rebut guardat com: " + rutaDesti);
     }
 
     public static void main(String[] args) {
@@ -49,9 +50,11 @@ public class Client {
                 nomFitxer = std.readLine();
                 if(!nomFitxer.equalsIgnoreCase("sortir")) {
                     client.rebreFitxers(nomFitxer, client.in, client.out);
+                }else{
+                    System.out.println("Sortint...");
                 }
             } while (!nomFitxer.equalsIgnoreCase("sortir"));
-            
+            System.out.println("Conexió Tancada.");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

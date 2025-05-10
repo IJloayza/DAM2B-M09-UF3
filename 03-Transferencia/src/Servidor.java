@@ -40,7 +40,12 @@ public class Servidor {
             return;
         }else {
             // Leer un fichero i enviar a client como byte[]
+            //NomFitxer el nombre del fitxer en este servidor
             out.writeObject("Enviant fitxer: " + nomFitxer);
+            Fitxer fitxer = new Fitxer(nomFitxer);
+            byte[] fitxerBytes = fitxer.getContingut();
+            System.out.println("MIda del fitxer en bytes: " + fitxerBytes.length);
+            out.writeObject(fitxerBytes);
         }
 
     }
@@ -53,6 +58,7 @@ public class Servidor {
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
             servidor.enviarFitxers(in, out);
+            servidor.tancar(socket);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
